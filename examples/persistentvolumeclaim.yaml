@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # Update these to whatever is the correct name, then make sure that the
+  # claimName in the main.ts file matches.
+  name: pipeline-data
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  # Update the storageClassName to the correct one for your cluster.
+  storageClassName: ocs-storagecluster-cephfs
+  resources:
+    requests:
+      storage: 10Gi
