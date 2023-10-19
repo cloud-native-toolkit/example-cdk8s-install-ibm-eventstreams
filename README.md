@@ -33,8 +33,11 @@ You can develop your own functions and objects in a construct library that is re
 The example pipeline has three tasks:
 
 1. A task that _creates a project (namespace)_.
-2. A task that _adds the IBM Operator Catalog_ to the OpenShift catalog sources.
-3. A task that _installs the IBM Event Streams_ operator.
+1. A task that _adds the IBM Operator Catalog_ to the OpenShift catalog sources.
+1. A task that _installs the IBM Common Services_ operator.
+1. A task that _installs the IBM Event Streams_ operator.
+1. A task that _creates the IBM entitlement key secret_.
+
 
 The next sections will provide an overview of these tasks, all of which are based on the 
 [openshift-client](https://hub.tekton.dev/tekton/task/openshift-client) task from [Tekton Hub](https://hub.tekton.dev/).
@@ -96,10 +99,17 @@ const registerCatalogSource = createApplyObjectTask(
 The `createApplyObjectTask` creates a `TaskBuilder` that uses the provided object
 (`ibmOperatorCatalog`) as the YAML to apply with the `oc apply` command.
 
-### Task: installing the operator
+### Task: installing the operators
 
-Installing the operator re-uses the same `createApplyObjectTask` function, this time using the
-`ibmEventStreamsSubscription` object.
+Installing the two operators re-use the same `createApplyObjectTask` function, this time using the
+`ibmCommonServicesOperator` and `ibmEventStreamsSubscription` objects.
+
+### Task: creating the secret
+
+The `createEntitlementKeySecret` function creates a `TaskBuilder` that uses the _openshift_client_
+from Tekton Hub to run a command to create the docker registry secret with the IBM entitlement key.
+if you build this example locally, the pipeline will automatically insert the value of the
+`IBM_ENTITLEMENT_SECRET` environment varialbe, if it is defined.
 
 ### Pipeline: putting it all together
 
